@@ -6,11 +6,10 @@ import (
 	"testing"
 
 	"github.com/rakunlabs/ok"
-	"github.com/rakunlabs/ok/oktest"
 )
 
 func TestDo_NilFunc(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
@@ -35,7 +34,7 @@ func TestDo_NilFunc(t *testing.T) {
 }
 
 func TestDo_ResponseBodyDrained(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -69,7 +68,7 @@ func TestDo_ResponseBodyDrained(t *testing.T) {
 }
 
 func TestDo_ErrorFromCallback(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
@@ -97,7 +96,7 @@ func TestDo_ErrorFromCallback(t *testing.T) {
 }
 
 func TestDo_PackageLevel(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write([]byte(`OK`))
@@ -122,7 +121,7 @@ func TestDo_PackageLevel(t *testing.T) {
 }
 
 func TestResponseFuncJSON_Success(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -160,7 +159,7 @@ func TestResponseFuncJSON_Success(t *testing.T) {
 }
 
 func TestResponseFuncJSON_NotFound(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		_, _ = w.Write([]byte(`not found`))
@@ -195,7 +194,7 @@ func TestResponseFuncJSON_NotFound(t *testing.T) {
 }
 
 func TestResponseFuncJSON_NilData(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)

@@ -24,7 +24,7 @@ go get github.com/rakunlabs/ok
 - **Structured logging** via `log/slog` with a pluggable `Logger` interface
 - **Environment variable overrides** (opt-in)
 - **Config struct** with `cfg` and `json` tags for file/env deserialization
-- **Test helpers** (`oktest` package) for unit testing without a real HTTP server
+- **Easy to test** with custom transports and `httptest`
 
 ## Quick Start
 
@@ -422,24 +422,18 @@ Environment variables have **lower precedence** than options set in code.
 
 ## Testing
 
-The `oktest` package provides a fake `http.RoundTripper` for unit testing without a real HTTP server:
+Use `httptest.NewServer` or provide a custom `http.RoundTripper` via `WithBaseTransport` for unit testing:
 
 ```go
-import (
-    "github.com/rakunlabs/ok"
-    "github.com/rakunlabs/ok/oktest"
-)
-
 func TestMyAPI(t *testing.T) {
-    th := &oktest.TransportHandler{}
-    th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
+    server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         w.Header().Set("Content-Type", "application/json")
-        w.WriteHeader(http.StatusOK)
         json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
-    })
+    }))
+    defer server.Close()
 
     client, err := ok.New(
-        ok.WithBaseTransport(th),
+        ok.WithBaseURL(server.URL),
         ok.WithDisableRetry(true),
     )
     if err != nil {
@@ -457,12 +451,6 @@ func TestMyAPI(t *testing.T) {
         t.Errorf("got %q, want %q", result["status"], "ok")
     }
 }
-```
-
-The handler can be swapped between test cases:
-
-```go
-th.SetHandler(newHandler) // thread-safe
 ```
 
 ## Options Reference

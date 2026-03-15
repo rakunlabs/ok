@@ -5,13 +5,12 @@ import (
 	"testing"
 
 	"github.com/rakunlabs/ok"
-	"github.com/rakunlabs/ok/oktest"
 )
 
 func TestEnv_BaseURL(t *testing.T) {
 	t.Setenv("OK_BASE_URL", "https://env.example.com")
 
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		if r.Host != "env.example.com" {
 			t.Errorf("expected host env.example.com, got %s", r.Host)
@@ -44,7 +43,7 @@ func TestEnv_BaseURL(t *testing.T) {
 func TestEnv_BaseURL_OptionTakesPrecedence(t *testing.T) {
 	t.Setenv("OK_BASE_URL", "https://env.example.com")
 
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		if r.Host != "option.example.com" {
 			t.Errorf("expected host option.example.com, got %s", r.Host)
@@ -78,7 +77,7 @@ func TestEnv_BaseURL_OptionTakesPrecedence(t *testing.T) {
 func TestEnv_DisabledByDefault(t *testing.T) {
 	t.Setenv("OK_BASE_URL", "https://env.example.com")
 
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		// Env values are disabled by default, so the env base URL should NOT be used.
 		w.WriteHeader(http.StatusOK)

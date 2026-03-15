@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"github.com/rakunlabs/ok"
-	"github.com/rakunlabs/ok/oktest"
 )
 
 func TestNew_Default(t *testing.T) {
@@ -41,7 +40,7 @@ func TestNew_Default(t *testing.T) {
 }
 
 func TestNew_WithTransportHandler(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -79,7 +78,7 @@ func TestNew_WithTransportHandler(t *testing.T) {
 }
 
 func TestNew_WithDefaultHeaders(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(map[string]string{
@@ -118,7 +117,7 @@ func TestNew_WithDefaultHeaders(t *testing.T) {
 }
 
 func TestNew_WithBaseURL(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(map[string]string{
@@ -163,7 +162,7 @@ func TestNew_InvalidBaseURL(t *testing.T) {
 }
 
 func TestNew_WithUserAgent(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(map[string]string{
@@ -197,7 +196,7 @@ func TestNew_WithUserAgent(t *testing.T) {
 }
 
 func TestNew_ConfigNew(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})

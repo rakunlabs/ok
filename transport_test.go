@@ -7,11 +7,10 @@ import (
 	"testing"
 
 	"github.com/rakunlabs/ok"
-	"github.com/rakunlabs/ok/oktest"
 )
 
 func TestTransport_ContextHeaders(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(map[string]string{
@@ -48,7 +47,7 @@ func TestTransport_ContextHeaders(t *testing.T) {
 }
 
 func TestTransport_InjectFunction(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(map[string]string{
@@ -84,7 +83,7 @@ func TestTransport_InjectFunction(t *testing.T) {
 }
 
 func TestTransport_DefaultHeaderNotOverridden(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(map[string]string{
@@ -120,7 +119,7 @@ func TestTransport_DefaultHeaderNotOverridden(t *testing.T) {
 }
 
 func TestTransport_BaseURLResolution(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(map[string]string{
@@ -157,7 +156,7 @@ func TestTransport_BaseURLResolution(t *testing.T) {
 }
 
 func TestTransport_RoundTripperWrapper(t *testing.T) {
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(map[string]string{

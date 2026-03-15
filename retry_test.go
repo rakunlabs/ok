@@ -9,13 +9,12 @@ import (
 	"time"
 
 	"github.com/rakunlabs/ok"
-	"github.com/rakunlabs/ok/oktest"
 )
 
 func TestRetry_Success(t *testing.T) {
 	var attempts atomic.Int32
 
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		count := attempts.Add(1)
 		if count < 3 {
@@ -60,7 +59,7 @@ func TestRetry_Success(t *testing.T) {
 func TestRetry_MaxExhausted(t *testing.T) {
 	var attempts atomic.Int32
 
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		attempts.Add(1)
 		w.WriteHeader(http.StatusServiceUnavailable)
@@ -100,7 +99,7 @@ func TestRetry_MaxExhausted(t *testing.T) {
 func TestRetry_DisabledRetry(t *testing.T) {
 	var attempts atomic.Int32
 
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		attempts.Add(1)
 		w.WriteHeader(http.StatusServiceUnavailable)
@@ -134,7 +133,7 @@ func TestRetry_DisabledRetry(t *testing.T) {
 func TestRetry_ContextCancelled(t *testing.T) {
 	var attempts atomic.Int32
 
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		attempts.Add(1)
 		w.WriteHeader(http.StatusServiceUnavailable)
@@ -175,7 +174,7 @@ func TestRetry_ContextCancelled(t *testing.T) {
 func TestRetry_PerRequestDisable(t *testing.T) {
 	var attempts atomic.Int32
 
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		attempts.Add(1)
 		w.WriteHeader(http.StatusServiceUnavailable)
@@ -215,7 +214,7 @@ func TestRetry_PerRequestDisable(t *testing.T) {
 func TestRetry_TooManyRequests(t *testing.T) {
 	var attempts atomic.Int32
 
-	th := &oktest.TransportHandler{}
+	th := &transportHandler{}
 	th.SetHandler(func(w http.ResponseWriter, r *http.Request) {
 		count := attempts.Add(1)
 		if count < 2 {
